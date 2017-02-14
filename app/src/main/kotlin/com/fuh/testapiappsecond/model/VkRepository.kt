@@ -22,7 +22,7 @@ class VkRepository {
         return vkApi.getFriends(userId, offset, count, fields)
     }
 
-    fun getCitiesById(cityIds: List<Int>):
+    fun getCitiesById(cityIds: Set<Int>):
             Observable<ApiModels.CitiesResponse> {
         return vkApi.getCitiesById(cityIds.joinToString(","))
     }

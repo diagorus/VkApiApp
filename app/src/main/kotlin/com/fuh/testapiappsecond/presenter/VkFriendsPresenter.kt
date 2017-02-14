@@ -1,7 +1,6 @@
 package com.fuh.testapiappsecond.presenter
 
 import android.util.Log
-import com.fuh.testapiappsecond.model.ApiModels
 import com.fuh.testapiappsecond.model.VkRepository
 import com.fuh.testapiappsecond.model.DomainModels
 import com.fuh.testapiappsecond.model.FriendMapper
@@ -22,14 +21,27 @@ class VkFriendsPresenter(val view: VkFriendsView, val model: VkRepository){
 
     fun loadFriends(offset: Int, count: Int) {
         model.getFriends(106478662 ,offset, count, "city,domain,photo_100,online")
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .flatMap { Observable.from(it.response) }
-                .map {
-
-                    FriendMapper().map(it)
+                .toList()
+                .observeOn(Schedulers.newThread())
+                .flatMap { friends ->
+                    val cityIds = friends.map { it.cityId }.toSet()
+                    model.getCitiesById(cityIds)
+                            .map { it.response.associateBy ({it.cid}, {it.name}) }
+                            .flatMap { citiesMap ->
+                                Observable.from(
+                                    friends.map {
+                                        with(it) {
+                                            DomainModels.Friend(uid, "$lastName $firstName",
+                                                    citiesMap[cityId] ?: "Unknown city",
+                                                    domain, photo50, online == 1)
+                                        }
+                                    }
+                            ) }
                 }
                 .toList()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe (
                         { view.showFriends(it) },
                         { Log.e(TAG, Log.getStackTraceString(it))})

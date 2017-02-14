@@ -17,7 +17,8 @@ import android.view.MenuItem
 import com.fuh.testapiappsecond.R
 import com.fuh.testapiappsecond.model.VkRepository
 import com.fuh.testapiappsecond.presenter.VkFriendsPresenter
-import com.fuh.testapiappsecond.utils.addFragmentToActivity
+import com.fuh.testapiappsecond.utils.addFragment
+import com.fuh.testapiappsecond.utils.replaceFragment
 import com.fuh.testapiappsecond.view.fragment.FriendsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -65,7 +66,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 FriendsFragment()
 
                 friendsFragment.presenter = VkFriendsPresenter(friendsFragment, VkRepository())
-                addFragmentToActivity(friendsFragment, R.id.fragment)
+                replaceFragment(friendsFragment, R.id.fragment)
             }
             R.id.nav_profile -> {
 

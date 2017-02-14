@@ -17,5 +17,5 @@ object ApiModels {
 
     data class City(
             @SerializedName("cid") val cid: Int,
-            @SerializedName("title") val title: String)
+            @SerializedName("name") val name: String)
 }
