@@ -14,8 +14,11 @@ import com.fuh.testapiappsecond.utils.ctx
 import com.fuh.testapiappsecond.utils.showToast
 import com.fuh.testapiappsecond.view.general.VkFriendsView
 import kotlinx.android.synthetic.main.fragment_friends.*
+import kotlinx.android.synthetic.main.layout_connection_error.*
+import kotlinx.android.synthetic.main.layout_progress_frame.*
 
-class FriendsFragment: Fragment(), VkFriendsView{
+class FriendsFragment: Fragment(), VkFriendsView {
+
     override lateinit var presenter: VkFriendsPresenter
 
     lateinit var friendsAdapter: FriendsAdapter
@@ -27,6 +30,11 @@ class FriendsFragment: Fragment(), VkFriendsView{
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        init()
+        presenter.loadFriends(0, 10)
+    }
+
+    fun init() {
         friendsAdapter = FriendsAdapter(mutableListOf<DomainModels.Friend>()) {
             presenter.onFriendClicked(it)
         }
@@ -36,7 +44,7 @@ class FriendsFragment: Fragment(), VkFriendsView{
             adapter = friendsAdapter;
         }
 
-        presenter.loadFriends(0, 10)
+        errorReload.setOnClickListener { presenter.loadFriends(0, 10) }
     }
 
     override fun showInfo(text: String) {
@@ -46,5 +54,22 @@ class FriendsFragment: Fragment(), VkFriendsView{
     override fun showFriends(friends: MutableList<DomainModels.Friend>) = with(friendsAdapter){
         this.friends = friends
         notifyDataSetChanged()
+    }
+
+    override fun showProgress() {
+        progressLayout.visibility = View.VISIBLE
+    }
+
+    override fun hideProgress() {
+        progressLayout.visibility = View.GONE
+    }
+
+    override fun showError(cause: String) {
+        errorInfo.text = cause
+        errorLayout.visibility = View.VISIBLE
+    }
+
+    override fun hideError() {
+        errorLayout.visibility = View.GONE
     }
 }

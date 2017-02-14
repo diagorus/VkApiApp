@@ -33,6 +33,7 @@ class VkFriendsPresenter(val view: VkFriendsView, val model: VkRepository){
                                 Observable.from(
                                     friends.map {
                                         with(it) {
+                                        //TODO: use tring resource instead of HARDCODED one
                                             DomainModels.Friend(uid, "$lastName $firstName",
                                                     citiesMap[cityId] ?: "Unknown city",
                                                     domain, photo50, online == 1)

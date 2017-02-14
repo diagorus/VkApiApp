@@ -9,4 +9,8 @@
         android:id="@+id/friendsList"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <include layout="@layout/layout_progress_frame"/>
+
+    <include layout="@layout/layout_connection_error"/>
 </LinearLayout>
